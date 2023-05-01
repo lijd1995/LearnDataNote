@@ -76,8 +76,8 @@ export default hopeTheme({
     intro: "/intro.html",
     roundAvatar: true,
     medias: {
-      GitHub: "https://github.com/lijd1995",
-      Wechat: "http://tc.seoipo.com/wechat.svg"
+      GitHub: "https://github.com/lijd1995"
+      // Wechat: "http://tc.seoipo.com/wechat.svg"
     },
   },
 
