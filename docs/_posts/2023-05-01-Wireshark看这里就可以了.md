@@ -9,8 +9,6 @@ tag:
 order: -4
 ---
 
-#wireshark #计算机网络 #网络 
-
 # Wireshark 的使用手册
 
 ## Wireshark 抓包分析
