@@ -9,9 +9,9 @@ tag:
 order: -4
 ---
 
-# Wireshark 的使用手册
+## Wireshark 的使用手册
 
-## Wireshark 抓包分析
+### Wireshark 抓包分析
 
 通过 tcpdump 生成 pcap 文件，通过 wireshark 打开后，可以看到三次握手进行连接的建立，可以进行分析了。
 
@@ -21,7 +21,7 @@ order: -4
 
 
 
-## wireshark 时序图
+### wireshark 时序图
 
 Statistics -> TCP Stream Graphs -> Time Sequence
 
@@ -43,7 +43,7 @@ Round Trip Time 往返时间 ：往返时间 vs 时间或序列号。 RTT 基�
 
 Window Scaling：窗口大小和未完成的字节数。
 
-### Wireshark的tcptrace图
+#### Wireshark的tcptrace图
 
 
 https://blog.csdn.net/dog250/article/details/53227203
@@ -56,7 +56,7 @@ https://blog.csdn.net/dog250/article/details/53227203
 蓝线（发送线）：发送端发送数据的序列号 / 时间线
 灰线（ACK线）：接收端应到达发送端的序列号 / 时间线
 
-###  tcptrace 图解详情
+####  tcptrace 图解详情
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261503080.png)
 
@@ -73,17 +73,17 @@ https://blog.csdn.net/dog250/article/details/53227203
 
 
 
-## Wireshark 常见异常报文分析
+### Wireshark 常见异常报文分析
 
 通过 wireshark 可以看到一些问题 [wireshark TCP常见异常报文分析](https://zhuanlan.zhihu.com/p/546465303)
 
-### TCP Window Full
+#### TCP Window Full
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261551533.png)
 
 TCP Window Full 接收方接收缓冲区满了后，导致发送方的发送缓冲区装满待确认数据，此时发送方会发送一个TCP Window Full消息。
 
-### TCP Zero Window
+#### TCP Zero Window
 
 
 
@@ -95,13 +95,13 @@ TCP Zero Window 是谁发送表示谁的 socket 缓冲区满了没有读。传�
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261636585.png)
 
 
-### TCP window update
+#### TCP window update
 
 当接收端接收窗口大小发生变化，可以接收数据了，这个时候接收方接收数据，从win=0逐渐变大，会打上 TCP window update 标签
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261557699.png)
 
-### TCP Previous segment not captured
+#### TCP Previous segment not captured
 
 指的是在TCP发送端传输过程中，该Seq前的报文缺失了。一般在网络拥塞的情况下，造成TCP报文乱序、丢包时，会出现该标志。
 
@@ -111,7 +111,7 @@ TCP Zero Window 是谁发送表示谁的 socket 缓冲区满了没有读。传�
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261604492.png)
 
-### TCP Out-Of-Order
+#### TCP Out-Of-Order
 
 TCP发送端传输过程中报文乱序了
 
@@ -121,14 +121,14 @@ TCP发送端传输过程中报文乱序了
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261608052.png)
 
-### TCP Spurious Retransmission
+#### TCP Spurious Retransmission
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261614158.png)
 [spurious-retransmissions](https://blog.packet-foo.com/2013/06/spurious-retransmissions/comment-page-1/)
 
 虚假重传，就是已经 ACK 的数据，又重传了一遍。这是因为发送方认为数据包丢失并再次发送，即使接收方为此发送了确认数据包。
 
-### TCP dup ack XXX#X
+#### TCP dup ack XXX#X
 
 标识第几次重新请求某一个包，#前xxx标识第几个包，#后的X标识第几次请求。
 
@@ -136,13 +136,13 @@ TCP dup ack 611#1 ：第一次重新请求第 611 个包。
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261618603.png)
 
-### TCP acked unseen segment
+#### TCP acked unseen segment
 
 ACK指向未知的TCP片段。wireshark上反馈是ACK指到不存在的TCP包。很可能是wireshark漏抓了这个包，但却抓到了对端反馈的该报文的ack包。如图。
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261623318.png)
 
-### TCP Retransmission
+#### TCP Retransmission
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261633621.png)
 
@@ -150,7 +150,7 @@ TCP超时重传。当同时抓到2次同一数据报文，且没有抓到初传�
 
 如果一个包丢了，又没有后续包可以在接收方触发Dup Ack，或者Dup Ack也丢失的话就不会快速重传。这种情况下发送方只能等到超时再重传。
 
-###  Wireshark 显示过滤器分析
+####  Wireshark 显示过滤器分析
 
 tcp.analysis.window_full
 
@@ -160,7 +160,7 @@ tcp.analysis.window_full
 
 
 
-## WireShark 常用列配置
+### WireShark 常用列配置
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241517220.png)
 
@@ -171,9 +171,9 @@ tcp.analysis.window_full
 
 
 
-# 常见问题
+## 常见问题
 
-## Mac 电脑 Wireshark 双开
+### Mac 电脑 Wireshark 双开
 
 http://www.xiangyuu.cn/%E6%9D%82%E4%B9%B1%E5%B0%8F%E7%AC%94%E8%AE%B0/MacOS%20Wireshark%E6%89%93%E5%BC%80%E5%A4%9A%E7%AA%97%E5%8F%A3.html
 
@@ -186,7 +186,7 @@ open -n -a /Applications/Wireshark.app file_name.pcap
 ```
 
 
-## Wireshark 恢复默认列配置
+### Wireshark 恢复默认列配置
 
 ![image.png](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241548731.png)
 
