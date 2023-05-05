@@ -6,8 +6,8 @@
     <link>https://newzone.top/</link>
     <description>开源工具、效率方法、心理学探索的自我提升笔记，记录并输出一切能让自己提升的知识。</description>
     <language>zh-CN</language>
-    <pubDate>Thu, 04 May 2023 16:41:01 GMT</pubDate>
-    <lastBuildDate>Thu, 04 May 2023 16:41:01 GMT</lastBuildDate>
+    <pubDate>Fri, 05 May 2023 00:03:06 GMT</pubDate>
+    <lastBuildDate>Fri, 05 May 2023 00:03:06 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <category>博客</category>
@@ -20,11 +20,11 @@
       <category>博客</category>
       <category>计算机网络</category>
       <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
-      <content:encoded><![CDATA[<h1 id="从一个面试题开始" tabindex="-1"> 从一个面试题开始</h1>
+      <content:encoded><![CDATA[<h2 id="从一个面试题开始" tabindex="-1"> 从一个面试题开始</h2>
 <p>输入 ping IP 后敲回车，然后发生了什么？如果跟域名有关，还涉及到 DNS 解析的步骤，这里面我们只关注 ping IP。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305031702640.png" alt="image.png" loading="lazy"></p>
-<h1 id="课前知识" tabindex="-1"> 课前知识</h1>
-<h2 id="route-路由表" tabindex="-1"> route 路由表</h2>
+<h2 id="课前知识" tabindex="-1"> 课前知识</h2>
+<h3 id="route-路由表" tabindex="-1"> route 路由表</h3>
 <p>linux 通过 route -n 查看</p>
 <div><pre><code>$route -n
 Kernel IP routing table
@@ -48,7 +48,7 @@ Destination Gateway Genmask Flags Metric RefUse Iface
 <p>根据路由，我们知道目标 ip 将要走哪个网卡出去。</p>
 <p>接下来就要判断目标 ip 是否在同一个子网了。</p>
 <p><a href="https://blog.csdn.net/kikajack/article/details/80457841" target="_blank" rel="noopener noreferrer">Linux 路由表详解及 route 命令详解</a></p>
-<h2 id="ifconfig" tabindex="-1"> ifconfig</h2>
+<h3 id="ifconfig" tabindex="-1"> ifconfig</h3>
 <p>在 linux 机器上通过 <code>ifconfig</code> 命令，查看网卡信息，下面包括三个网卡：docker0、eth0、lo</p>
 <div><pre><code>$ifconfig
 docker0: flags=4099&lt;UP,BROADCAST,MULTICAST>  mtu 1500
@@ -78,14 +78,14 @@ lo: flags=73&lt;UP,LOOPBACK,RUNNING>  mtu 65536
 <p>如果目标 ip 在子网内，就是在同一个二层网络，直连可以通。</p>
 <p>如果目标 ip 和本机不再同一个子网，那么本机只管将网络包发送给本机网关，剩下的由网关按照上面的逻辑不停地往外走直到发送给目标机器（网关拿到这个包，先查看自己的路由，然后按照路由扔给下一跳）</p>
 <p><strong>直连可通的意思</strong>：本机发广播包对方能收到，这个时候就要来到ARP 广播找对方机器的Mac地址了(如果不是同一个二层，就是转发给网关，那么这里同样也是ARP 广播找网关机器的Mac–本机和网关一定在同一个子网)</p>
-<h2 id="arp-协议" tabindex="-1"> ARP 协议</h2>
+<h3 id="arp-协议" tabindex="-1"> ARP 协议</h3>
 <p>网络包在物理层传输的时候依赖的 mac 地址而不是上面目的的 IP 地址，也就是根据 mac 地址来决定把包发到哪里去。</p>
 <p>ARP 协议就是查询某个IP地址的mac地址是多少，由于这种对应关系一般不太变化，所以每个os都有一份arp缓存（一般15分钟过期），也可以手工清理，下面是arp缓存的内容：</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305031741980.png" alt="image.png" loading="lazy"></p>
 <p>清除 ARP 缓存，可以使用 arp -d 命令。</p>
-<h1 id="进入正题-ping-回车后发生了什么" tabindex="-1"> 进入正题，ping 回车后发生了什么</h1>
+<h2 id="进入正题-ping-回车后发生了什么" tabindex="-1"> 进入正题，ping 回车后发生了什么</h2>
 <p>OS 需要把 ping 命令封成一个 icmp 包，填上包头（IP、mac地址），OS 根据目标 IP 和本机的 route 规则计算使用哪个网卡（interface），每条路由规则基本都包含目标 IP 范围、网关、网卡这样几个基本元素。</p>
-<h2 id="如果目标ip在同一个子网" tabindex="-1"> 如果目标IP在同一个子网</h2>
+<h3 id="如果目标ip在同一个子网" tabindex="-1"> 如果目标IP在同一个子网</h3>
 <p>如果目标 IP  和本机 IP 是同一个子网（根据本机 ifconfig 上的每个网卡的 netmask 来判断），并且本机 arp 缓存没有这条 IP 对应的 mac 记录，那么给整个子网的所有机器广播发送一个 arp 查询。</p>
 <p>来看一次完整的ping 10.125.3.43，tcpdump 抓包结果：</p>
 <div><pre><code>$sudo tcpdump -i eth0  arp or icmp
@@ -99,7 +99,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
 <p>收到这个回复后，arp 先缓存起来，下个 ping 包就不需要再次 arp 广播了。</p>
 <p>然后将这个 mac 地址填写到 ping 包的包头的目标 Mac（icmp包），然后发出这个 icmp request 包，同一个子网，按照 MAC 地址，正确到达目标机器，然后对方正确回复 icmp reply【对方回复也要查路由规则，arp 查发送方的 mac，这样回包才能正确路由回来，略过】。</p>
 <p>接着再 ping 一次同一个 IP 地址，arp 有缓存了就看不到 arp 广播查询过程了。</p>
-<h2 id="如果目标ip不是同一个子网" tabindex="-1"> 如果目标IP不是同一个子网</h2>
+<h3 id="如果目标ip不是同一个子网" tabindex="-1"> 如果目标IP不是同一个子网</h3>
 <p>如果目标 IP 不是同一个子网，就需要通过本 IP 网关进行转发，如果本机没有缓存网关的 mac，就需要先发送一次 arp 查询网关的 mac 地址，流程跟上面的是一样的，只是这个 icmp 包发送到网关上去了（mac 地址填写的是网关的 mac）</p>
 <p>比如：从本机10.125.3.33 ping 11.239.161.60的过程，因为不是同一子网按照路由规则匹配，根据route表应该走10.125.15.254这个网关，如下截图：</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305031852069.png" alt="image.png" loading="lazy"></p>
@@ -109,18 +109,18 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
     inet 11.239.161.60  netmask 255.255.252.0  broadcast 11.239.163.255
     ether 00:16:3e:00:04:c4  txqueuelen 1000  (Ethernet)
 </code></pre><div aria-hidden="true"><div></div><div></div><div></div></div></div><p>这个包根据 Mac 地址路由到了网关上</p>
-<h2 id="网关接下来该怎么办" tabindex="-1"> 网关接下来该怎么办？</h2>
+<h3 id="网关接下来该怎么办" tabindex="-1"> 网关接下来该怎么办？</h3>
 <p>为了简化问题，假设两个网关直连</p>
 <p>网关收到这个包后（因为mac地址是她的），打开一看IP地址是 11.239.161.60，不是自己的，于是继续查自己的route和arp缓存，发现11.239.161.60这个IP的网关是11.239.163.247，于是把包的目的mac地址改成11.239.163.247的mac继续发出去。</p>
 <p>11.239.163.247这个网关收到包后，一看 11.239.161.60是自己同一子网的IP，于是该arp广播找mac就广播，cache有就拿cache的，然后这个包才最终到达目的11.239.161.60上。</p>
 <p><strong>整个过程中目标mac地址每一跳都在变，IP地址不变，每经过一次变化可以简单理解从一跳。</strong></p>
 <p>实际上可能要经过多个网关多次跳跃才能真正到达目标机器。</p>
-<h2 id="目标收到这个-icmp-包后的回复过程" tabindex="-1"> 目标收到这个 icmp 包后的回复过程</h2>
+<h3 id="目标收到这个-icmp-包后的回复过程" tabindex="-1"> 目标收到这个 icmp 包后的回复过程</h3>
 <p>过程同上，略过。</p>
-<h2 id="arp-广播风暴和-arp-欺骗" tabindex="-1"> arp 广播风暴和 arp 欺骗</h2>
+<h3 id="arp-广播风暴和-arp-欺骗" tabindex="-1"> arp 广播风暴和 arp 欺骗</h3>
 <p><strong>广播风暴</strong>：如果一个子网非常大，机器非常多，每次arp查询都是广播的话，也容易因为 N x N的问题导致广播风暴。</p>
 <p><strong>arp欺骗</strong>：同样如果一个子网中的某台机器冒充网关或者其他机器，当收到arp查询的时候总是把自己的mac冒充目标机器的mac发给你，然后你的包先走到他，为了不被发现达到自己的目的后再转发给真正的网关或者机器，所以在里面都点什么手脚，看看你发送的内容都还是很容易的。</p>
-<h1 id="网络到底通不通是个复杂的问题" tabindex="-1"> 网络到底通不通是个复杂的问题</h1>
+<h2 id="网络到底通不通是个复杂的问题" tabindex="-1"> 网络到底通不通是个复杂的问题</h2>
 <p>讲这个过程的核心目的是除了真正的网络不通，有些是服务不可用了也怪网络。很多现场的同学根本讲不清自己的服务（比如80端口上的tomcat服务）还在不在，网络通不通，网络不通的话该怎么办？</p>
 <p>实际这里涉及到四个节点（以两个网关直连为例），<strong>srcIP -&gt; src网关 -&gt; dest网关 -&gt; destIP</strong>.如果ping不通(也有特殊的防火墙限制ping包不让过的），那么分段ping（二分查找程序员应该最熟悉了）。 比如前面的例子就是网关没有把包转发回来</p>
 <p>抓包看ping包有没有出去，对方抓包看有没有收到，收到后有没有回复。</p>
@@ -135,7 +135,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
 </ol>
 </li>
 </ol>
-<h1 id="接下来说点跟程序员日常相关的" tabindex="-1"> 接下来说点跟程序员日常相关的</h1>
+<h2 id="接下来说点跟程序员日常相关的" tabindex="-1"> 接下来说点跟程序员日常相关的</h2>
 <p><strong>如果网络能ping通，服务无法访问</strong></p>
 <p>那么尝试telnet IP port 看看你的服务监听的端口是否还在，在的话是否能正常响应新的连接。有时候是进程挂掉了，端口也没人监听了。有时候是进程还在但是死掉了，所以端口也不响应新的请求了。</p>
 <p>如果端口还在也是正常的话，telnet应该是好的：</p>
@@ -149,24 +149,24 @@ Connection closed by foreign host.
 <div><pre><code>$telnet 11.239.161.60 2379
 Trying 11.239.161.60...
 telnet: connect to address 11.239.161.60: Connection refused
-</code></pre><div aria-hidden="true"><div></div><div></div><div></div></div></div><h1 id="tcp-建立连接的过程" tabindex="-1"> TCP 建立连接的过程</h1>
+</code></pre><div aria-hidden="true"><div></div><div></div><div></div></div></div><h2 id="tcp-建立连接的过程" tabindex="-1"> TCP 建立连接的过程</h2>
 <p>TCP 建连接过程跟前面 ping 一样，只是把 ping 的 icmp 协议换成 TCP 协议，也是要先根据route，然后 arp。</p>
-<h1 id="ping-过程的流程图" tabindex="-1"> ping 过程的流程图</h1>
+<h2 id="ping-过程的流程图" tabindex="-1"> ping 过程的流程图</h2>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305032147555.png" alt="ping 的流程.png" loading="lazy"></p>
-<h1 id="ping-真牛逼" tabindex="-1"> ping 真牛逼</h1>
-<h2 id="案例1-通过-ping-进行差异对比" tabindex="-1"> 案例1：通过 ping 进行差异对比</h2>
+<h2 id="ping-真牛逼" tabindex="-1"> ping 真牛逼</h2>
+<h3 id="案例1-通过-ping-进行差异对比" tabindex="-1"> 案例1：通过 ping 进行差异对比</h3>
 <p>有一次服务A跨公网调用服务B（友商），性能总是上不去，互相都说自己没问题（常见的扯皮），跨公司还不好沟通，扯了很久，于是我在起压力的时候从服务A挑了两个的节点（一个有业务流量叫A、一个没有流量叫A1），同时再随便在公网挑了C，从三个节点同时ping服务B，并和没有压力的时候对比。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305042346331.png" alt="img" loading="lazy"></p>
 <p>发现有压力的时候服务A、A1两个节点都很慢，但是节点 C 不管有没有压力一直很稳定（说明服务B没问题），随即推定节点A1 ping 不应该慢，但实际慢了说明问题不在服务A上，而是在链路上。</p>
 <p>最后发现是服务A到共公网出口snat CPU打满了。</p>
-<h2 id="案例2-用两次-ping-差异就搞定了抖动定位环境" tabindex="-1"> 案例2：用两次 ping 差异就搞定了抖动定位环境</h2>
+<h3 id="案例2-用两次-ping-差异就搞定了抖动定位环境" tabindex="-1"> 案例2：用两次 ping 差异就搞定了抖动定位环境</h3>
 <p>Cloudflare 的案例：</p>
 <p><strong><a href="https://blog.cloudflare.com/the-story-of-one-latency-spike/" target="_blank" rel="noopener noreferrer">The story of one latency spike</a></strong> 延时偶发性很高，<strong>用两次 ping 差异就搞定了抖动定位环境</strong>，然后再上 tcpdump，systemtap 分析内核函数是否卡顿，从30秒368万次 net_rx_action 调用都是1ms以内中发现最慢一次有23ms，再到 tcp_collapse 函数（avg 3ms, 最大21ms， 对应30秒总调用次数 155次）</p>
-<h2 id="案例3-分析压测瓶颈问题" tabindex="-1"> 案例3：分析压测瓶颈问题</h2>
+<h3 id="案例3-分析压测瓶颈问题" tabindex="-1"> 案例3：分析压测瓶颈问题</h3>
 <p>有个环境死活压不上去，我ssh到他们的业务节点 ping了一下前端LVS ip 发现压力大的时候rt抖动厉害，停掉压力rt稳定。然后推动LVS检查，一看CPU 100%了</p>
 <p>如下图：乱跳的 RTT，正常是一个稳定的 2ms左右的值</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305050030919.png" alt="img" loading="lazy"></p>
-<h1 id="总结" tabindex="-1"> 总结</h1>
+<h2 id="总结" tabindex="-1"> 总结</h2>
 <p>先通过路由表，找网卡信息，然后根据网卡信息上的子网掩码，判断是不是在同一个子网，如果是同一个子网，通过 ARP 协议找到对应的 mac 地址，就在 二层进行通信了，如果不是的话，就发送到网关，然后网关拿到这个包，再进行路由。</p>
 <p>如果碰到网络出现异常了，看看下面几种情况：</p>
 <ol>
@@ -175,13 +175,13 @@ telnet: connect to address 11.239.161.60: Connection refused
 <li>网络包发出去没有(抓包 tcpdump、wireshark)</li>
 <li>是所有的机器都不通还是只有你的机器不通</li>
 </ol>
-<h1 id="待补充" tabindex="-1"> 待补充</h1>
+<h2 id="待补充" tabindex="-1"> 待补充</h2>
 <ul>
 <li><input type="checkbox" id="task-item-0" disabled="disabled"><label for="task-item-0"> route 路由表的命令详情</label></li>
 <li><input type="checkbox" id="task-item-1" disabled="disabled"><label for="task-item-1"> 如何通过子网掩码计算ip是不是属于同一个子网</label></li>
 <li>[ ]</li>
 </ul>
-<h1 id="参考" tabindex="-1"> 参考：</h1>
+<h2 id="参考" tabindex="-1"> 参考：</h2>
 <ul>
 <li><a href="https://plantegg.github.io/2019/05/15/%E5%B0%B1%E6%98%AF%E8%A6%81%E4%BD%A0%E6%87%82%E7%BD%91%E7%BB%9C--%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E5%8C%85%E7%9A%84%E6%97%85%E7%A8%8B/" target="_blank" rel="noopener noreferrer">一个网络包的旅程</a></li>
 <li><a href="https://blog.csdn.net/kikajack/article/details/80457841" target="_blank" rel="noopener noreferrer">Linux 路由表详解及 route 命令详解</a></li>
@@ -197,19 +197,19 @@ telnet: connect to address 11.239.161.60: Connection refused
       <category>博客</category>
       <category>计算机网络</category>
       <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
-      <content:encoded><![CDATA[<h1 id="docker-下面的一些常用命令" tabindex="-1"> Docker 下面的一些常用命令</h1>
-<h2 id="拉取容器" tabindex="-1"> 拉取容器</h2>
+      <content:encoded><![CDATA[<h2 id="docker-下面的一些常用命令" tabindex="-1"> Docker 下面的一些常用命令</h2>
+<h3 id="拉取容器" tabindex="-1"> 拉取容器</h3>
 <p>docker 安装 ubuntu</p>
 <div><pre><code>docker pull ubuntu:20.04
-</code></pre><div aria-hidden="true"><div></div></div></div><h2 id="启动容器" tabindex="-1"> 启动容器</h2>
+</code></pre><div aria-hidden="true"><div></div></div></div><h3 id="启动容器" tabindex="-1"> 启动容器</h3>
 <p>启动一个基于 ubuntu:latest 镜像构建，并且名字为 <code>gorden5566</code> 的容器，加上名字是为了以后查看或操作方便。</p>
 <div><pre><code>docker run -itd --name gorden5566 ubuntu:latest
-</code></pre><div aria-hidden="true"><div></div></div></div><h2 id="查看容器是否启动成功" tabindex="-1"> 查看容器是否启动成功</h2>
+</code></pre><div aria-hidden="true"><div></div></div></div><h3 id="查看容器是否启动成功" tabindex="-1"> 查看容器是否启动成功</h3>
 <p>可通过如下命令查看是否启动成功</p>
 <div><pre><code>docker ps
 </code></pre><div aria-hidden="true"><div></div></div></div><p>输出的内容格式如下</p>
 <div><pre><code>ded0f1381e6c   2bf9cad791e7             "bash"                   28 hours ago    Up 28 hours                             gorden5566
-</code></pre><div aria-hidden="true"><div></div></div></div><h2 id="连接到容器" tabindex="-1"> 连接到容器</h2>
+</code></pre><div aria-hidden="true"><div></div></div></div><h3 id="连接到容器" tabindex="-1"> 连接到容器</h3>
 <p>执行如下命令连接到刚创建的容器</p>
 <div><pre><code>docker exec -it gorden5566 /bin/bash
 </code></pre><div aria-hidden="true"><div></div></div></div><p>由于 bash 使用上不够便捷，我选择安装了 fish，之所以不选择 zsh 是因为还要安装 oh-my-zsh，比较麻烦</p>
@@ -230,7 +230,7 @@ telnet: connect to address 11.239.161.60: Connection refused
 <p>使用 <code>--privileged</code> 命令赋予容器真正的 root 权限</p>
 <div><pre><code>docker run -itd --privileged --name gorden5566 gubuntu
 
-</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h2 id="安装命令" tabindex="-1"> 安装命令</h2>
+</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h3 id="安装命令" tabindex="-1"> 安装命令</h3>
 <p>默认安装的 ubuntu 是经过精简的，需要安装命令</p>
 <div><pre><code>apt-get update
 //ifconfig 
@@ -239,7 +239,7 @@ apt install net-tools
 apt install iputils-ping 
 </code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div></div></div><p>没有的命令也可以通过 apt install 进行安装</p>
 <p>https://blog.csdn.net/jiankunking/article/details/60466652</p>
-<h2 id="打包镜像" tabindex="-1"> 打包镜像</h2>
+<h3 id="打包镜像" tabindex="-1"> 打包镜像</h3>
 <p>容器中安装了所需命令，并且按照个人习惯进行了设置，可以打包成一个镜像，后续根据这个镜像创建新的容器。</p>
 <div><pre><code>docker commit -m "first commit" -a "gorden5566" gorden5566 gubuntu
 </code></pre><div aria-hidden="true"><div></div></div></div><p><code>-m &quot;first commit&quot;</code> 表示本次提交的注释为 <code>first commit</code>
@@ -253,20 +253,20 @@ docker rm gorden5566
 
 docker run -itd --privileged --ulimit memlock=-1 --mount type=bind,src=/Users/gorden5566/github,dst=/github --name gorden5566 gubuntu	
 
-</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div><div></div></div></div><h2 id="快速链接到容器" tabindex="-1"> 快速链接到容器</h2>
+</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div><div></div></div></div><h3 id="快速链接到容器" tabindex="-1"> 快速链接到容器</h3>
 <p>每次执行 <code>docker exec</code> 命令比较麻烦，可以配置为 alias 以简化操作。如下是在本地主机的 .zshrc 中新增的配置。</p>
 <div><pre><code>alias gubuntu="docker exec -it gorden5566 /usr/bin/fish"
-</code></pre><div aria-hidden="true"><div></div></div></div><h2 id="docker-删除镜像文件" tabindex="-1"> docker 删除镜像文件</h2>
+</code></pre><div aria-hidden="true"><div></div></div></div><h3 id="docker-删除镜像文件" tabindex="-1"> docker 删除镜像文件</h3>
 <p><a href="https://www.freecodecamp.org/chinese/news/how-to-remove-images-in-docker/" target="_blank" rel="noopener noreferrer">如何删除 Docker 镜像和容器</a></p>
 <p><code>docker rmi</code> 通过镜像的 ID 删除镜像。</p>
 <p>要删除镜像，首先需要列出所有镜像以获取镜像的 ID，镜像的名称和其他详细信息。 运行简单的命令 <code>docker images -a</code> 或 <code>docker images</code>。</p>
 <p>之后，明确要删除哪个镜像，然后执行简单命令 <code>docker rmi &lt;your-image-id&gt;</code>。然后，列出所有镜像并检查，可以确认镜像是否已删除。</p>
-<h2 id="上传镜像到远程仓库" tabindex="-1"> 上传镜像到远程仓库</h2>
+<h3 id="上传镜像到远程仓库" tabindex="-1"> 上传镜像到远程仓库</h3>
 <p><a href="https://blog.csdn.net/javaee_gao/article/details/122053127" target="_blank" rel="noopener noreferrer">docker 入门之提交镜像到远程仓库</a></p>
 <p><a href="https://hub.docker.com/" target="_blank" rel="noopener noreferrer">仓库地址</a></p>
 <p>这个有点类似于 Maven 的镜像仓库，所以为啥 Docker 能火，Maven 也能火，就是快捷，方便，才够持久。</p>
 <p>用户名：lijunda1995</p>
-<h3 id="linux-服务器登录-docker-hub" tabindex="-1"> Linux 服务器登录 Docker Hub</h3>
+<h4 id="linux-服务器登录-docker-hub" tabindex="-1"> Linux 服务器登录 Docker Hub</h4>
 <p>可以通过命令行的方式执行 <strong>docker <code>login</code></strong> 输入用户名与密码，登陆成功后会默认保存我们的认证信息,首先查看命令的使用帮助：</p>
 <div><pre><code>[root@VM-0-10-centos ~]# docker login --help
 
@@ -283,7 +283,7 @@ Options:
 </code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div><p>docker login – username 用户名 服务器地址(可以不填模式就是Docker Hub地址)</p>
 <div><pre><code>## 登陆
 docker login -u lijunda1995
-</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h3 id="打包镜像-1" tabindex="-1"> 打包镜像</h3>
+</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h4 id="打包镜像-1" tabindex="-1"> 打包镜像</h4>
 <p>docker commit -a 用户 -m 提交信息 容器id dockerhub用户名/仓库:标签</p>
 <div><pre><code>
 ## 查看tomcat进程
@@ -292,12 +292,12 @@ b9dec6aec9dc   tomcat    "catalina.sh run"        19 minutes ago   Up 15 minutes
 
 ## 将运行中的tomcat打包成镜像
 docker commit -m 'commit my-tomcat' -a 'GalenGao' b9dec6aec9dc galengao/my-tomcat:v1
-</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div><h3 id="上传镜像" tabindex="-1"> 上传镜像</h3>
+</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div><h4 id="上传镜像" tabindex="-1"> 上传镜像</h4>
 <div><pre><code>## docker push dockerhub用户名/镜像:标签
 docker push galengao/my-tomcat:v1
-</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h3 id="查看镜像" tabindex="-1"> 查看镜像</h3>
+</code></pre><div aria-hidden="true"><div></div><div></div></div></div><h4 id="查看镜像" tabindex="-1"> 查看镜像</h4>
 <p><a href="https://hub.docker.com/" target="_blank" rel="noopener noreferrer">登录网址</a></p>
-<h2 id="从-docker-下载文件" tabindex="-1"> 从 Docker 下载文件</h2>
+<h3 id="从-docker-下载文件" tabindex="-1"> 从 Docker 下载文件</h3>
 <p>通过 cp 指令下载</p>
 <p>docker cp 容器id:容器文件路径 本地路径</p>
 <div><pre><code>docker cp ecef8319d2c8:/root/test.txt /root/
@@ -313,12 +313,12 @@ docker push galengao/my-tomcat:v1
       <category>博客</category>
       <category>计算机网络</category>
       <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
-      <content:encoded><![CDATA[<h1 id="wireshark-的使用手册" tabindex="-1"> Wireshark 的使用手册</h1>
-<h2 id="wireshark-抓包分析" tabindex="-1"> Wireshark 抓包分析</h2>
+      <content:encoded><![CDATA[<h2 id="wireshark-的使用手册" tabindex="-1"> Wireshark 的使用手册</h2>
+<h3 id="wireshark-抓包分析" tabindex="-1"> Wireshark 抓包分析</h3>
 <p>通过 tcpdump 生成 pcap 文件，通过 wireshark 打开后，可以看到三次握手进行连接的建立，可以进行分析了。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304251434170.png" alt="image.png" loading="lazy"></p>
 <p>这里面涉及到 wireshark 的一些基本信息查看和命令的使用。</p>
-<h2 id="wireshark-时序图" tabindex="-1"> wireshark 时序图</h2>
+<h3 id="wireshark-时序图" tabindex="-1"> wireshark 时序图</h3>
 <p>Statistics -&gt; TCP Stream Graphs -&gt; Time Sequence</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304251451604.png" alt="image.png" loading="lazy"></p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304251451351.png" alt="image.png" loading="lazy"></p>
@@ -329,14 +329,14 @@ docker push galengao/my-tomcat:v1
 <p>Throughput：平均吞吐量和吞吐量。</p>
 <p>Round Trip Time 往返时间 ：往返时间 vs 时间或序列号。 RTT 基于对应于特定段的确认时间戳。</p>
 <p>Window Scaling：窗口大小和未完成的字节数。</p>
-<h3 id="wireshark的tcptrace图" tabindex="-1"> Wireshark的tcptrace图</h3>
+<h4 id="wireshark的tcptrace图" tabindex="-1"> Wireshark的tcptrace图</h4>
 <p>https://blog.csdn.net/dog250/article/details/53227203</p>
 <p>这个文章很不错，我觉得应该还有更好的，但这个就已经不错了。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261501207.png" alt="image.png" loading="lazy"></p>
 <p>绿线（接收先）：接收端窗口的序列号 / 时间线
 蓝线（发送线）：发送端发送数据的序列号 / 时间线
 灰线（ACK线）：接收端应到达发送端的序列号 / 时间线</p>
-<h3 id="tcptrace-图解详情" tabindex="-1"> tcptrace 图解详情</h3>
+<h4 id="tcptrace-图解详情" tabindex="-1"> tcptrace 图解详情</h4>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261503080.png" alt="image.png" loading="lazy"></p>
 <p>这里面可以看到几点：</p>
 <ol>
@@ -351,58 +351,58 @@ docker push galengao/my-tomcat:v1
 </li>
 </ol>
 <p><a href="https://www.cnblogs.com/xiaolincoding/p/12922927.html" target="_blank" rel="noopener noreferrer">wireshark</a></p>
-<h2 id="wireshark-常见异常报文分析" tabindex="-1"> Wireshark 常见异常报文分析</h2>
+<h3 id="wireshark-常见异常报文分析" tabindex="-1"> Wireshark 常见异常报文分析</h3>
 <p>通过 wireshark 可以看到一些问题 <a href="https://zhuanlan.zhihu.com/p/546465303" target="_blank" rel="noopener noreferrer">wireshark TCP常见异常报文分析</a></p>
-<h3 id="tcp-window-full" tabindex="-1"> TCP Window Full</h3>
+<h4 id="tcp-window-full" tabindex="-1"> TCP Window Full</h4>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261551533.png" alt="image.png" loading="lazy"></p>
 <p>TCP Window Full 接收方接收缓冲区满了后，导致发送方的发送缓冲区装满待确认数据，此时发送方会发送一个TCP Window Full消息。</p>
-<h3 id="tcp-zero-window" tabindex="-1"> TCP Zero Window</h3>
+<h4 id="tcp-zero-window" tabindex="-1"> TCP Zero Window</h4>
 <p>TCP Zero Window 是谁发送表示谁的 socket 缓冲区满了没有读。传输过程中，接收方TCP窗口满了，win=0，wireshark会打上 <strong>TCP ZeroWindow</strong> 标签。</p>
 <p>基本上就像我们上面设置的一样，差不多每 100ms 都会出现这个问题。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261636585.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-window-update" tabindex="-1"> TCP window update</h3>
+<h4 id="tcp-window-update" tabindex="-1"> TCP window update</h4>
 <p>当接收端接收窗口大小发生变化，可以接收数据了，这个时候接收方接收数据，从win=0逐渐变大，会打上 TCP window update 标签</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261557699.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-previous-segment-not-captured" tabindex="-1"> TCP Previous segment not captured</h3>
+<h4 id="tcp-previous-segment-not-captured" tabindex="-1"> TCP Previous segment not captured</h4>
 <p>指的是在TCP发送端传输过程中，该Seq前的报文缺失了。一般在网络拥塞的情况下，造成TCP报文乱序、丢包时，会出现该标志。</p>
 <p>需要注意的是，TCP Previous segment not captured 解析文字是 wireshark 添加的标记，并非TCP报文内容。</p>
 <p>正常计算下一个 seq 应该是 570530，而这个 seq 是 574874，所以中间包丢失了。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261604492.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-out-of-order" tabindex="-1"> TCP Out-Of-Order</h3>
+<h4 id="tcp-out-of-order" tabindex="-1"> TCP Out-Of-Order</h4>
 <p>TCP发送端传输过程中报文乱序了</p>
 <p>继续上面的，我们在 Seq = 574874 前面应该还有一个 Seq = 570530 的包</p>
 <p>如果因为网络拥塞的情况下，TCP 包不能按照顺序到达，所以会出现  <strong>TCP Out-Of-Order</strong></p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261608052.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-spurious-retransmission" tabindex="-1"> TCP Spurious Retransmission</h3>
+<h4 id="tcp-spurious-retransmission" tabindex="-1"> TCP Spurious Retransmission</h4>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261614158.png" alt="image.png" loading="lazy">
 <a href="https://blog.packet-foo.com/2013/06/spurious-retransmissions/comment-page-1/" target="_blank" rel="noopener noreferrer">spurious-retransmissions</a></p>
 <p>虚假重传，就是已经 ACK 的数据，又重传了一遍。这是因为发送方认为数据包丢失并再次发送，即使接收方为此发送了确认数据包。</p>
-<h3 id="tcp-dup-ack-xxx-x" tabindex="-1"> TCP dup ack XXX#X</h3>
+<h4 id="tcp-dup-ack-xxx-x" tabindex="-1"> TCP dup ack XXX#X</h4>
 <p>标识第几次重新请求某一个包，#前xxx标识第几个包，#后的X标识第几次请求。</p>
 <p>TCP dup ack 611#1 ：第一次重新请求第 611 个包。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261618603.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-acked-unseen-segment" tabindex="-1"> TCP acked unseen segment</h3>
+<h4 id="tcp-acked-unseen-segment" tabindex="-1"> TCP acked unseen segment</h4>
 <p>ACK指向未知的TCP片段。wireshark上反馈是ACK指到不存在的TCP包。很可能是wireshark漏抓了这个包，但却抓到了对端反馈的该报文的ack包。如图。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261623318.png" alt="image.png" loading="lazy"></p>
-<h3 id="tcp-retransmission" tabindex="-1"> TCP Retransmission</h3>
+<h4 id="tcp-retransmission" tabindex="-1"> TCP Retransmission</h4>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304261633621.png" alt="image.png" loading="lazy"></p>
 <p>TCP超时重传。当同时抓到2次同一数据报文，且没有抓到初传包的反馈ack，wireshark就会判断发生了重传，标记为TCP Retransmission。</p>
 <p>如果一个包丢了，又没有后续包可以在接收方触发Dup Ack，或者Dup Ack也丢失的话就不会快速重传。这种情况下发送方只能等到超时再重传。</p>
-<h3 id="wireshark-显示过滤器分析" tabindex="-1"> Wireshark 显示过滤器分析</h3>
+<h4 id="wireshark-显示过滤器分析" tabindex="-1"> Wireshark 显示过滤器分析</h4>
 <p>tcp.analysis.window_full</p>
 <p>可以在 wireshark 的显式过滤器中，对这些标志进行过滤。通过 tcp.analysis.tag</p>
-<h2 id="wireshark-常用列配置" tabindex="-1"> WireShark 常用列配置</h2>
+<h3 id="wireshark-常用列配置" tabindex="-1"> WireShark 常用列配置</h3>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241517220.png" alt="image.png" loading="lazy"></p>
 <p>如何进行配置的 参考：<a href="https://blog.csdn.net/nuan444979/article/details/126967458?spm=1001.2101.3001.6650.3&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-126967458-blog-121558664.235%5Ev32%5Epc_relevant_default_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-126967458-blog-121558664.235%5Ev32%5Epc_relevant_default_base3&amp;utm_relevant_index=6" target="_blank" rel="noopener noreferrer">WireShark 自定义列显式</a></p>
-<h1 id="常见问题" tabindex="-1"> 常见问题</h1>
-<h2 id="mac-电脑-wireshark-双开" tabindex="-1"> Mac 电脑 Wireshark 双开</h2>
+<h2 id="常见问题" tabindex="-1"> 常见问题</h2>
+<h3 id="mac-电脑-wireshark-双开" tabindex="-1"> Mac 电脑 Wireshark 双开</h3>
 <p>http://www.xiangyuu.cn/%E6%9D%82%E4%B9%B1%E5%B0%8F%E7%AC%94%E8%AE%B0/MacOS%20Wireshark%E6%89%93%E5%BC%80%E5%A4%9A%E7%AA%97%E5%8F%A3.html</p>
 <div><pre><code># 打开多个初始Wireshark窗口
 open -n /Applications/Wireshark.app
 
 # 直接在多个窗口打开抓包文件
 open -n -a /Applications/Wireshark.app file_name.pcap
-</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div></div></div><h2 id="wireshark-恢复默认列配置" tabindex="-1"> Wireshark 恢复默认列配置</h2>
+</code></pre><div aria-hidden="true"><div></div><div></div><div></div><div></div><div></div></div></div><h3 id="wireshark-恢复默认列配置" tabindex="-1"> Wireshark 恢复默认列配置</h3>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241548731.png" alt="image.png" loading="lazy"></p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241548185.png" alt="image.png" loading="lazy">
 <img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304241549059.png" alt="image.png" loading="lazy"></p>
