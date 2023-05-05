@@ -6,8 +6,8 @@
     <link>https://newzone.top/</link>
     <description>开源工具、效率方法、心理学探索的自我提升笔记，记录并输出一切能让自己提升的知识。</description>
     <language>zh-CN</language>
-    <pubDate>Fri, 05 May 2023 00:03:06 GMT</pubDate>
-    <lastBuildDate>Fri, 05 May 2023 00:03:06 GMT</lastBuildDate>
+    <pubDate>Fri, 05 May 2023 00:04:10 GMT</pubDate>
+    <lastBuildDate>Fri, 05 May 2023 00:04:10 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <category>博客</category>
@@ -19,7 +19,7 @@
       <source url="https://newzone.top/rss.xml">输入ping IP后敲回车，然后发生了什么</source>
       <category>博客</category>
       <category>计算机网络</category>
-      <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
+      <pubDate>Thu, 04 May 2023 00:00:00 GMT</pubDate>
       <content:encoded><![CDATA[<h2 id="从一个面试题开始" tabindex="-1"> 从一个面试题开始</h2>
 <p>输入 ping IP 后敲回车，然后发生了什么？如果跟域名有关，还涉及到 DNS 解析的步骤，这里面我们只关注 ping IP。</p>
 <p><img src="https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202305031702640.png" alt="image.png" loading="lazy"></p>
